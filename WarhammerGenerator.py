@@ -78,21 +78,24 @@ HumanTraitTable = ['Acute Sense(any)','Ambidextrous','Animal Affinity','artistic
 HumanTraitIndeces = [0,0,0,1,1,1,2,2,2,3,3,3,4,4,4,5,5,5,6,6,6,7,7,7,8,8,8,8,9,9,9,10,10,10,11,11,11,11,12,12,12,13,13,13,14,14,14,15,15,15,
 					 16,16,17,17,17,18,18,18,19,19,19,19,20,20,20,21,21,21,22,22,22,23,23,23,24,24,24,24,25,25,25,26,26,26,27,27,27,28,28,28,28,29,29,29,30,30,30,31,31,31]
 
-raceIndex = 0
-Character_Stats = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-strength_bonus = 0
-tough_bonus = 0
-will_bonus = 0
-Age = 0
-Hair = ''
-Eyes = ''
-Career = ''
-charClass = ''
-charTalents = []
-charTrappings = []
+class Character:
+	raceIndex = 0
+	race = ''
+	name = ''
+	Character_Stats = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+	strength_bonus = 0
+	tough_bonus = 0
+	will_bonus = 0
+	Age = 0
+	Hair = ''
+	Eyes = ''
+	Career = ''
+	charClass = ''
+	charTalents = []
+	charTrappings = []
 
 def Generate_stats():
-	
+	c = Character()
 	#Determining race, career and age
 	careerScore = random.randint(0,99)
 	race = random.randint(1,100)
@@ -100,99 +103,108 @@ def Generate_stats():
 	#race = 90
 	#careerScore = 77
 	if race <= 90:
-		raceIndex = 0
-		Age = 15 +random.randint(1,10)
-		charClass = Class_table[HumanCareerCoord[careerScore][0]]
-		Career = Career_table[HumanCareerCoord[careerScore][1]]
-		get_trappings(HumanCareerCoord[careerScore][0])
+		c.raceIndex = 0
+		c.race = 'Human   '
+		c.Age = 15 +random.randint(1,10)
+		c.charClass = Class_table[HumanCareerCoord[careerScore][0]]
+		c.Career = Career_table[HumanCareerCoord[careerScore][1]]
+		#get_trappings(HumanCareerCoord[careerScore][0])
 		print("Human character")
 	elif race <= 94:
-		raceIndex = 1
-		charClass = Class_table[DwarfCareerCoord[careerScore][0]]
-		Career = Career_table[DwarfCareerCoord[careerScore][1]]
-		get_trappings(DwarfCareerCoord[careerScore][0])
-		Age = 15
+		c.raceIndex = 1
+		c.race = 'Dwarf   '
+		c.charClass = Class_table[DwarfCareerCoord[careerScore][0]]
+		c.Career = Career_table[DwarfCareerCoord[careerScore][1]]
+		#get_trappings(DwarfCareerCoord[careerScore][0])
+		c.Age = 15
 		for value in range(0,10):
-			Age += random.randint(1,10)
+			c.Age += random.randint(1,10)
 		print("Dwarf character")
 	elif race <= 98:
-		raceIndex = 2
-		charClass = Class_table[HaflingCareerCoord[careerScore][0]]
-		Career = Career_table[HaflingCareerCoord[careerScore][1]]
-		get_trappings(HaflingCareerCoord[careerScore][0])
-		Age = 15
+		c.raceIndex = 2
+		c.race = 'Halfling'
+		c.charClass = Class_table[HaflingCareerCoord[careerScore][0]]
+		c.Career = Career_table[HaflingCareerCoord[careerScore][1]]
+		#get_trappings(HaflingCareerCoord[careerScore][0])
+		c.Age = 15
 		for value in range(0,5):
-			Age += random.randint(1,10)
+			c.Age += random.randint(1,10)
 		print("Halfling character")
 	elif race == 99:
-		raceIndex = 3
-		charClass = Class_table[HighElfCareerCoord[careerScore][0]]
-		Career = Career_table[HighElfCareerCoord[careerScore][1]]
-		get_trappings(HighElfCareerCoord[careerScore][0])
-		Age = 30
+		c.raceIndex = 3
+		c.race = 'High Elf'
+		c.charClass = Class_table[HighElfCareerCoord[careerScore][0]]
+		c.Career = Career_table[HighElfCareerCoord[careerScore][1]]
+		#get_trappings(HighElfCareerCoord[careerScore][0])
+		c.Age = 30
 		for value in range(0,10):
-			Age += random.randint(1,10)
+			c.Age += random.randint(1,10)
 		print("High Elf character")
 	elif race == 100:
-		raceIndex = 4
-		charClass = Class_table[WoodElfCareerCoord[careerScore][0]]
-		Career = Career_table[WoodElfCareerCoord[careerScore][1]]
-		get_trappings(WoodElfCareerCoord[careerScore][0])
-		Age = 30
+		c.raceIndex = 4
+		c.race = 'Wood Elf'
+		c.charClass = Class_table[WoodElfCareerCoord[careerScore][0]]
+		c.Career = Career_table[WoodElfCareerCoord[careerScore][1]]
+		#get_trappings(WoodElfCareerCoord[careerScore][0])
+		c.Age = 30
 		for value in range(0,10):
-			Age += random.randint(1,10)
+			c.Age += random.randint(1,10)
 		print("Wood Elf character")
 	else:
 		print("error?")
-		
+
+	c.name = input('character name? ').title()
+	c.name += ' '*(53-len(c.name))
+	
 	#Generating character's stats
 	for value in range(0,10):
-		Character_Stats[value] = Stats_tables[raceIndex][value] + random.randint(1,10) +random.randint(1,10)
+		c.Character_Stats[value] = Stats_tables[c.raceIndex][value] + random.randint(1,10) +random.randint(1,10)
 	for value in range(10,14):
-		Character_Stats[value+1] = Stats_tables[raceIndex][value]
+		c.Character_Stats[value+1] = Stats_tables[c.raceIndex][value]
 	
 	#Determining stat bonus for health calc	
-	strength_bonus = str(Character_Stats[2])[0]
-	tough_bonus = str(Character_Stats[3])[0]
-	will_bonus = str(Character_Stats[8])[0]
+	c.strength_bonus = str(c.Character_Stats[2])[0]
+	c.tough_bonus = str(c.Character_Stats[3])[0]
+	c.will_bonus = str(c.Character_Stats[8])[0]
 	
 	#Health calculation
-	if raceIndex == 2:
-		Character_Stats[10] = 2*int(tough_bonus) + int(will_bonus)
+	if c.raceIndex == 2:
+		c.Character_Stats[10] = 2*int(c.tough_bonus) + int(c.will_bonus)
 	else:
-		Character_Stats[10] = int(strength_bonus) + 2*int(tough_bonus) + int(will_bonus)
+		c.Character_Stats[10] = int(c.strength_bonus) + 2*int(c.tough_bonus) + int(c.will_bonus)
 	
 	#Allocating extra points to fate and resolve
-	fate = int(input("you have " + str(Character_Stats[13]) + " extra points. How many should go to your fate? "))
+	fate = int(input("you have " + str(c.Character_Stats[13]) + " extra points. How many should go to your fate? "))
 	
-	while fate > Character_Stats[13] or fate < 0:
-		fate = int(input("Incorrect value! input cannot be negative or exceed " +str(Character_Stats[13]) + ": "))
+	while fate > c.Character_Stats[13] or fate < 0:
+		fate = int(input("Incorrect value! input cannot be negative or exceed " +str(c.Character_Stats[13]) + ": "))
 		
-	Character_Stats[11] += fate
-	Character_Stats[12] += Character_Stats[13]-fate
+	c.Character_Stats[11] += fate
+	c.Character_Stats[12] += c.Character_Stats[13]-fate
 	
 	#rolling random hair and eye colours
 	Roll= random.randint(1,10) + random.randint(1,10) - 2
-	if raceIndex == 0 and Roll == 0:
+	if c.raceIndex == 0 and Roll == 0:
 		print('Free choice! choose one of the following:')
 		print('1: Green, 2: Pale Blue, 3: Blue, 4: Pale Grey, 5: Grey, 6: Brown, 7: Hazel, 8: Dark Brown, 9: Black')
 		Roll = int(input(''))
-		Eyes = Eye_tables[raceIndex][Roll]
+		c.Eyes = Eye_tables[c.raceIndex][Roll]
 	else:
-		Eyes = Eye_tables[raceIndex][EyeHairIndeces[Roll]]
+		c.Eyes = Eye_tables[c.raceIndex][EyeHairIndeces[Roll]]
 	Roll= random.randint(1,10) + random.randint(1,10) - 2
-	Hair = Hair_tables[raceIndex][EyeHairIndeces[Roll]]
+	c.Hair = Hair_tables[c.raceIndex][EyeHairIndeces[Roll]]
 	
 	#Printing out stats for testing.
 	for value in range(0,15):
-		print(Stats_description[value] +str(Character_Stats[value]))
-	print('Walk: ' + str(Character_Stats[14]*2))
-	print('Run: ' + str(Character_Stats[14]*4))
-	print('Age: ' + str(Age))
-	print('Eye colour: ' + Eyes)
-	print('Hair Colour: ' + Hair)
-	print(charClass +' : '+Career)
-	print(charTrappings)
+		print(Stats_description[value] +str(c.Character_Stats[value]))
+	print('Walk: ' + str(c.Character_Stats[14]*2))
+	print('Run: ' + str(c.Character_Stats[14]*4))
+	print('Age: ' + str(c.Age))
+	print('Eye colour: ' + c.Eyes)
+	print('Hair Colour: ' + c.Hair)
+	print(c.charClass +' : '+ c.Career)
+	#print(charTrappings)
+	print_char(c)
 
 def get_trappings(careerIndex):
 	for trappings in Class_trapings[careerIndex]:
@@ -202,7 +214,33 @@ def get_trappings(careerIndex):
 	if careerIndex == 6:
 		charTrappings.append(str(random.randint(1,10))+' Matches')
 		charTrappings.append(input('Choose one: Hood or Mask (type choice) '))
-		
+
+def print_char(char):
+	blank = open('sheet2.txt','r')
+	new_sheet = open('out_char.txt','w')
+	for i in range(0,7):
+		new_sheet.write(blank.readline())
+	new_sheet.write(blank.readline().format(char.name,char.race,char.charClass))
+	new_sheet.write(blank.readline())
+	new_sheet.write(blank.readline().format(char.Career))
+	for i in range(0,3):
+		new_sheet.write(blank.readline())
+	new_sheet.write(blank.readline().format(char.Age,char.Hair,char.Eyes))
+	for i in range(0,3):
+		new_sheet.write(blank.readline())
+	new_sheet.write(blank.readline().format(str(char.Character_Stats[11])+' '))
+	new_sheet.write(blank.readline())
+	new_sheet.write(blank.readline().format(str(char.Character_Stats[0]),str(char.Character_Stats[1]),str(char.Character_Stats[2]),
+											str(char.Character_Stats[3]),str(char.Character_Stats[4]),str(char.Character_Stats[5]),
+											str(char.Character_Stats[6]),str(char.Character_Stats[7]),str(char.Character_Stats[8]),
+											str(char.Character_Stats[9]),str(char.Character_Stats[12])+' '))
+	for i in range(0,3):
+		new_sheet.write(blank.readline())
+	new_sheet.write(blank.readline().format(str(char.Character_Stats[14])+' ',str(char.Character_Stats[14]*2)+' ',str(char.Character_Stats[14]*4)))
+	new_sheet.write(blank.read())
+	blank.close()
+	new_sheet.close()
+
 Generate_stats()
 #for value in range(0,100):
 #	print(str(value+1) + ' : ' + HumanTraitTable[HumanTraitIndeces[value]])
