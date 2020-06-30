@@ -4,7 +4,15 @@ import random
 Stats_description = ['Weapon Skill: ', 'Ballistic Skill: ', 'Strength: ', 'Toughness: ',
 					 'Initiative: ', 'Agility: ', 'Dexterity: ', 'Intelligence: ', 'Willpower: ', 
 					 'Fellowship: ', 'Wounds: ', 'Fate: ', 'Resilliance: ', 'Extra points: ', 'Movement: ']
-					 
+
+race_list = ['Human   ','Dwarf   ','Halfling','High Elf','Wood Elf']
+
+init_height = [57,51,36,71,71]
+height_dice = [2,1,1,1,1]
+
+init_age = [15,15,15,30,30]
+age_dice = [1,10,5,10,10]
+
 Stats_tables = [[20,20,20,20,20,20,20,20,20,20,2,1,3,4],
 				[30,20,20,30,20,10,30,20,40,10,0,2,2,3],
 				[10,30,10,20,20,20,30,20,30,30,0,2,3,3],
@@ -45,7 +53,18 @@ Career_table = ['Apothecary    ','Engineer      ','Lawyer        ','Nun         
 				'Bounty Hunter ','Coachman      ','Entertainer   ','Flagellant    ','Messenger     ','Pedlar        ','Road Warden   ','Witch Hunter  ',
 				'Boatman       ','Huffer        ','Riverwarden   ','Riverwoman    ','Seaman        ','Smuggler      ','Stevedore     ','Wrecker       ',
 				'Bawd          ','Charlatan     ','Fence         ','Grave Robber  ','Outlaw        ','Rackteer      ','Thief         ','Witch         ',
-				'Cavalryman    ','Guard         ','Knight        ','Pit Fighter   ','Protagonist   ','soldier       ','Slayer        ','Warrior Priest']
+				'Cavalryman    ','Guard         ','Knight        ','Pit Fighter   ','Protagonist   ','Soldier       ','Slayer        ','Warrior Priest']
+
+career_path_list = [("Apothecary's Apprentice",'Brass 3 '),("Student Engineer",'Brass 4 '),("Student Lawyer",'Brass 4 '),("Novitiate",'Brass 1 '),("Physician's Apprentice",'Brass 4 '),("Initiate",'Brass 2 '),("Student",'Brass 3 '),("Wizard's Apprentice",'Brass 3 '),
+					("Pamphleteer",'Brass 1 '),("Apprentice Artisan",'Brass 2 '),("Pauper",'Brass 0 '),("Sleuth",'Silver 1'),("Trader",'Silver 2'),("Rat Hunter",'Brass 3 '),("Clerk",'Silver 1'),("Watch Recruit",'Brass 3 '),
+					("Aide",'Silver 2'),("Apprentice Artist",'Silver 1'),("Fencer",'Silver 3'),("Herald",'Silver 2'),("Scion",'Gold 1  '),("Menial",'Silver 1'),("Informer",'Brass 3 '),("Custodian",'Silver 1'),
+					("Tax Collector",'Silver 1'),("Hedge Apprentice",'Brass 1 '),("Herb Gatherer",'Brass 2 '),("Trapper",'Brass 2 '),("Prospector",'Brass 2 '),("Fortune Teller",'Brass 1 '),("Guide",'Brass 3 '),("Peasant",'Brass 2 '),
+					("Thief-taker",'Silver 1'),("Postilion",'Silver 1'),("Busker",'Brass 3 '),("Zealot",'Brass 0 '),("Runner",'Brass 3 '),("Pedlar",'Brass 1 '),("Toll Keeper",' Brass 5 '),("Interrogator",'Silver 1'),
+					("Boat-hand",'Silver 1'),("Riverguide",'Brass 4 '),("River Recruit",'Silver 1'),("Greenfish",'Brass 2 '),("Landsman",'Silver 1'),("River Runner",'Brass 2 '),("Dockhand",'Brass 3 '),("Cargo Scavenger",'Brass 2 '),
+					("Hustler",'Brass 1 '),("Swindler",'Brass 3 '),("Broker",'Silver 1'),("Grave Robber",'Brass 2 '),("Brigand",'Brass 1 '),("Thug",'Brass 3'),("Prowler",'Brass 1 '),("Hexer",'Brass 1 '),
+					("Horseman",'Silver 2'),("Sentry",'Silver 1'),("Squire",'Silver 3'),("Pugilist",'Brass 4 '),("Braggart",'Brass 2 '),("Recruit",'Silver 1'),("Troll Slayer",'Brass 2 '),("Novitiate",'Brass 2 ')]
+
+career_path_dict = dict(zip(Career_table,career_path_list))
 
 HumanCareerCoord = [[0,0],[0,1],[0,2],[0,3],[0,3],[0,4],[0,5],[0,5],[0,5],[0,5],[0,5],[0,6],[0,6],[0,7],[1,8],[1,9],[1,9],[1,10],[1,10],[1,11],[1,12],[1,13],[1,13],[1,14],[1,14],
 					[1,14],[1,15],[2,16],[2,17],[2,18],[2,19],[2,20],[2,21],[2,21],[2,21],[2,22],[2,23],[3,24],[3,25],[3,26],[3,27],[3,27],[3,28],[3,29],[3,30],[3,31],[3,31],[3,31],[3,31],[3,31],
@@ -88,6 +107,8 @@ class Character:
 	will_bonus = 0
 	Age = 0
 	Hair = ''
+	heigth = 0
+	height_str = ''
 	Eyes = ''
 	Career = ''
 	charClass = ''
@@ -100,62 +121,47 @@ def Generate_stats():
 	careerScore = random.randint(0,99)
 	race = random.randint(1,100)
 	#Hardcode value here for specific race
-	#race = 90
+	#+race = 90
 	#careerScore = 77
 	if race <= 90:
-		c.raceIndex = 0
-		c.race = 'Human   '
-		c.Age = 15 +random.randint(1,10)
+		set_race(c,0)
 		c.charClass = Class_table[HumanCareerCoord[careerScore][0]]
 		c.Career = Career_table[HumanCareerCoord[careerScore][1]]
 		#get_trappings(HumanCareerCoord[careerScore][0])
 		print("Human character")
 	elif race <= 94:
-		c.raceIndex = 1
-		c.race = 'Dwarf   '
+		set_race(c,1)
 		c.charClass = Class_table[DwarfCareerCoord[careerScore][0]]
 		c.Career = Career_table[DwarfCareerCoord[careerScore][1]]
 		#get_trappings(DwarfCareerCoord[careerScore][0])
-		c.Age = 15
-		for value in range(0,10):
-			c.Age += random.randint(1,10)
 		print("Dwarf character")
 	elif race <= 98:
-		c.raceIndex = 2
-		c.race = 'Halfling'
+		set_race(c,2)
 		c.charClass = Class_table[HaflingCareerCoord[careerScore][0]]
 		c.Career = Career_table[HaflingCareerCoord[careerScore][1]]
 		#get_trappings(HaflingCareerCoord[careerScore][0])
-		c.Age = 15
-		for value in range(0,5):
-			c.Age += random.randint(1,10)
 		print("Halfling character")
 	elif race == 99:
-		c.raceIndex = 3
-		c.race = 'High Elf'
+		set_race(c,3)
 		c.charClass = Class_table[HighElfCareerCoord[careerScore][0]]
 		c.Career = Career_table[HighElfCareerCoord[careerScore][1]]
 		#get_trappings(HighElfCareerCoord[careerScore][0])
-		c.Age = 30
-		for value in range(0,10):
-			c.Age += random.randint(1,10)
 		print("High Elf character")
 	elif race == 100:
-		c.raceIndex = 4
-		c.race = 'Wood Elf'
+		set_race(c,4)
 		c.charClass = Class_table[WoodElfCareerCoord[careerScore][0]]
 		c.Career = Career_table[WoodElfCareerCoord[careerScore][1]]
 		#get_trappings(WoodElfCareerCoord[careerScore][0])
-		c.Age = 30
-		for value in range(0,10):
-			c.Age += random.randint(1,10)
 		print("Wood Elf character")
 	else:
 		print("error?")
 
 	c.name = input('character name? ').title()
-	c.name += ' '*(53-len(c.name))
-	
+
+	c.height_str = '{}\'{}"'.format(str(c.height//12),str(c.height%12))
+	if len(c.height_str)<5:
+		c.height_str+=' '
+
 	#Generating character's stats
 	for value in range(0,10):
 		c.Character_Stats[value] = Stats_tables[c.raceIndex][value] + random.randint(1,10) +random.randint(1,10)
@@ -206,6 +212,16 @@ def Generate_stats():
 	#print(charTrappings)
 	print_char(c)
 
+def set_race(char,r_index):
+	char.raceIndex = r_index
+	char.race = race_list[r_index]
+	char.height = init_height[r_index]
+	for i in range(0,height_dice[r_index]):
+		char.height += random.randint(1,10)
+	char.Age = init_age[r_index]
+	for value in range(0,age_dice[r_index]):
+		char.Age += random.randint(1,10)
+
 def get_trappings(careerIndex):
 	for trappings in Class_trapings[careerIndex]:
 		charTrappings.append(trappings)
@@ -217,15 +233,16 @@ def get_trappings(careerIndex):
 
 def print_char(char):
 	blank = open('sheet2.txt','r')
-	new_sheet = open('out_char.txt','w')
+	new_sheet = open('{}.txt'.format(char.name),'w')
 	for i in range(0,7):
 		new_sheet.write(blank.readline())
-	new_sheet.write(blank.readline().format(char.name,char.race,char.charClass))
+	new_sheet.write(blank.readline().format(char.name + ' '*(53-len(char.name)),char.race,char.charClass))
 	new_sheet.write(blank.readline())
 	new_sheet.write(blank.readline().format(char.Career))
-	for i in range(0,3):
-		new_sheet.write(blank.readline())
-	new_sheet.write(blank.readline().format(char.Age,char.Hair,char.Eyes))
+	new_sheet.write(blank.readline())
+	new_sheet.write(blank.readline().format(career_path_dict.get(char.Career)[0]+' '*(23-len(career_path_dict.get(char.Career)[0])),career_path_dict.get(char.Career)[1]))
+	new_sheet.write(blank.readline())
+	new_sheet.write(blank.readline().format(char.Age,char.height_str,char.Hair,char.Eyes))
 	for i in range(0,3):
 		new_sheet.write(blank.readline())
 	new_sheet.write(blank.readline().format(str(char.Character_Stats[11])+' '))
@@ -233,7 +250,8 @@ def print_char(char):
 	new_sheet.write(blank.readline().format(str(char.Character_Stats[0]),str(char.Character_Stats[1]),str(char.Character_Stats[2]),
 											str(char.Character_Stats[3]),str(char.Character_Stats[4]),str(char.Character_Stats[5]),
 											str(char.Character_Stats[6]),str(char.Character_Stats[7]),str(char.Character_Stats[8]),
-											str(char.Character_Stats[9]),str(char.Character_Stats[12])+' '))
+											str(char.Character_Stats[9]),str(char.Character_Stats[11])+' ',str(char.Character_Stats[12])+' ',
+											str(char.Character_Stats[12])+' '))
 	for i in range(0,3):
 		new_sheet.write(blank.readline())
 	new_sheet.write(blank.readline().format(str(char.Character_Stats[14])+' ',str(char.Character_Stats[14]*2)+' ',str(char.Character_Stats[14]*4)))
@@ -242,5 +260,3 @@ def print_char(char):
 	new_sheet.close()
 
 Generate_stats()
-#for value in range(0,100):
-#	print(str(value+1) + ' : ' + HumanTraitTable[HumanTraitIndeces[value]])
